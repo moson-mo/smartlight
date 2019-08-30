@@ -1,13 +1,10 @@
 package service
 
 import (
-	"bufio"
 	"flag"
 	"fmt"
 	"net"
 	netrpc "net/rpc"
-	"os"
-	"strings"
 
 	"github.com/moson-mo/smartlight/internal/helper"
 
@@ -16,6 +13,10 @@ import (
 
 // Run loads configuration (from file or arguments), start's rpc server and service
 func Run() {
+
+	// quit chan, when written into chan, I'll die :(
+	q := make(chan bool)
+
 	// load config (if available)
 	c, err := loadConfig()
 	if err != nil {
@@ -64,7 +65,7 @@ func Run() {
 		Stop:  s.Stop,
 		Quit: func() {
 			s.Stop()
-			os.Exit(0)
+			q <- true // die!!!!!!!!!!!!!!!!!!!!!! sucker!
 		},
 		IsRunning: &s.IsRunning,
 	}
@@ -77,21 +78,7 @@ func Run() {
 	// start service
 	go s.Start()
 
-	// control service (actually this was meant for debugging purposes, but ok, let's keep it :) )
-	reader := bufio.NewReader(os.Stdin)
-	for {
-		input, _ := reader.ReadString('\n')
-		input = strings.Replace(input, "\n", "", -1)
-		if input == "stop" {
-			s.Stop()
-		}
-		if input == "start" {
-			go s.Start()
-		}
-		if input == "quit" {
-			break
-		}
-	}
+	<-q
 }
 
 // start the rpc server which is accessed by the tray and cli applications

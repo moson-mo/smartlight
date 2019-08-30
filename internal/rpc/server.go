@@ -5,10 +5,12 @@ import (
 	"time"
 )
 
+// Response is the message returned from service
 type Response struct {
 	Message string
 }
 
+// Server is the RPC server handler (which functions are available)
 type Server struct {
 	IsRunning *bool
 	Stop      func()
@@ -16,6 +18,7 @@ type Server struct {
 	Quit      func()
 }
 
+// Execute is the method that can be called from the rpc clients
 func (s *Server) Execute(req string, res *Response) error {
 	if req == "stop" {
 		if *s.IsRunning {

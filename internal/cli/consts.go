@@ -1,6 +1,7 @@
 package cli
 
 const (
+	// info text which is printed when -h or equivalent parameters are used
 	infoTXT = `smartlight cli-client
 
 Usage:

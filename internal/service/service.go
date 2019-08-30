@@ -26,14 +26,13 @@ type service struct {
 	IsRunning bool
 }
 
-func new(duration uint, offLevel, onLevel int, verbose bool) (*service, error) {
-	d := time.Duration(duration) * time.Second
-	fmt.Println(d)
+// create new service instance
+func new(c config) (*service, error) {
+	d := time.Duration(c.Duration) * time.Second
 	s := service{
 		Duration:  d,
-		OffLevel:  offLevel,
-		OnLevel:   onLevel,
-		Verbose:   verbose,
+		OffLevel:  c.OffLevel,
+		OnLevel:   c.OnLevel,
 		IsRunning: false,
 
 		done:   make(chan bool),
@@ -52,6 +51,7 @@ func new(duration uint, offLevel, onLevel int, verbose bool) (*service, error) {
 	return &s, nil
 }
 
+// Start is starting the service which checks for keyboard / mouse events and sets the backlight accordingly.
 func (s *service) Start() {
 	if s.IsRunning {
 		helper.PrintErrorString("already running!")
@@ -62,6 +62,7 @@ func (s *service) Start() {
 	s.waitForEvents()
 }
 
+// Stop stops the service
 func (s *service) Stop() {
 	s.done <- true
 	s.done <- true
@@ -71,6 +72,8 @@ func (s *service) Stop() {
 	s.mut.Unlock()
 }
 
+// Event loop that checks for keyboard / mouse input and switches backlight on/off accordingly
+// the core of this whole thing :)
 func (s *service) waitForEvents() {
 	s.events = hook.Start()
 	defer func() {
@@ -103,10 +106,9 @@ func (s *service) waitForEvents() {
 	}
 }
 
+// Method that is switching off the backlight (according to OffLevel value)
 func (s *service) setBacklightOff() {
-	if s.Verbose {
-		fmt.Println("Switching backlight off")
-	}
+	fmt.Println("Switching backlight off")
 
 	err := s.setBacklightValue(s.OffLevel)
 	if err != nil {
@@ -119,12 +121,11 @@ func (s *service) setBacklightOff() {
 	s.mut.Unlock()
 }
 
+// Method that is switching on the backlight (according to OnLevel value)
 func (s *service) setBacklightOn() {
 	s.timer.Reset(s.Duration)
 	if !s.active {
-		if s.Verbose {
-			fmt.Println("Switching backlight on")
-		}
+		fmt.Println("Switching backlight on")
 
 		err := s.setBacklightValue(s.OnLevel)
 		if err != nil {
@@ -138,6 +139,7 @@ func (s *service) setBacklightOn() {
 	}
 }
 
+// Methods that set's the backlight value via dbus
 func (s *service) setBacklightValue(level int) error {
 	call := s.obj.Call("org.freedesktop.UPower.KbdBacklight.SetBrightness", 0, level)
 	if call.Err != nil {

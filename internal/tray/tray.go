@@ -18,6 +18,7 @@ var (
 	iconSuccessPath string
 )
 
+// Run starts this whole mess :)
 func Run() {
 	path, err := installCacheFiles()
 	if err != nil {
@@ -28,6 +29,7 @@ func Run() {
 	systray.Run(makeTrayIcon, killTrayIcon)
 }
 
+// creates tray icon & calls function for building menu
 func makeTrayIcon() {
 	var err error
 	icons, err = getIcons()
@@ -43,6 +45,7 @@ func makeTrayIcon() {
 	buildMenu()
 }
 
+// builds the menu and registers click events (what happens when an item is clicked)
 func buildMenu() {
 
 	mir := systray.AddMenuItem("Re-connect", "Tries to reconnect to the service")
@@ -53,6 +56,7 @@ func buildMenu() {
 
 	setItemStatus(mie, mid, mir)
 
+	// disable entry (stop)
 	go func() {
 		for {
 			<-mid.ClickedCh
@@ -67,6 +71,8 @@ func buildMenu() {
 			systray.SetIcon(icons["ioff"])
 		}
 	}()
+
+	// enable entry (start)
 	go func() {
 		for {
 			<-mie.ClickedCh
@@ -81,26 +87,33 @@ func buildMenu() {
 			systray.SetIcon(icons["ion"])
 		}
 	}()
+
+	// re-connect enty
 	go func() {
 		for {
 			<-mir.ClickedCh
 			setItemStatus(mie, mid, mir)
 		}
 	}()
+
+	// quit entry
 	go func() {
 		<-miquit.ClickedCh
 		systray.Quit()
 	}()
 }
 
+// error notification
 func notifyError(err string) {
 	beeep.Notify("smartlight - Error", err, iconErrPath)
 }
 
+// success notification (hopefully more than the one before :) )
 func notifySuccess(msg string) {
 	beeep.Notify("smartlight - Success", "smartlight service "+msg, iconSuccessPath)
 }
 
+// set menu item status according to service status / state, status, what, who cares :)
 func setItemStatus(mie, mid, mir *systray.MenuItem) {
 	status, err := callRPCFunc("status")
 	if err != nil {
@@ -126,6 +139,7 @@ func setItemStatus(mie, mid, mir *systray.MenuItem) {
 	systray.SetIcon(icons["ioff"])
 }
 
+// communicate with the service
 func callRPCFunc(com string) (string, error) {
 	client, err := netrpc.Dial("tcp", "127.0.0.1:31987")
 	if err != nil {
@@ -141,6 +155,7 @@ func callRPCFunc(com string) (string, error) {
 	return r.Message, nil
 }
 
+// doesn't so shit atm
 func killTrayIcon() {
 
 }

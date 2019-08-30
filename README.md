@@ -46,6 +46,11 @@ Note that you need to build first (or download binries from release on github).
 
 In order to run things on startup set up smservice (and smtray if you like) as startup application on your favorite desktop environment.
 
+## Configuration
+
+On the first start of smservice, a config file is created here `~/.smartlight/config.json`, adjust the settings as needed.</br>
+You can also override those settings by running the application with parameters. Start the service with "-h" to see a list of available options.
+
 ## Based on
 
 Following libraries are used:

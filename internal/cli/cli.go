@@ -9,6 +9,7 @@ import (
 	"github.com/moson-mo/smartlight/internal/rpc"
 )
 
+// Run starts this whole thing :) and runs commands against the RPC server of the service
 func Run() {
 	if len(os.Args) < 2 || wantsHelp(os.Args[1]) {
 		fmt.Println(infoTXT)
@@ -39,6 +40,7 @@ func Run() {
 	fmt.Println("Command executed.\nService returned: " + r.Message)
 }
 
+// holy crap, yes, i do want/need help
 func wantsHelp(arg string) bool {
 	if strings.Contains(arg, "-h") || strings.Contains(arg, "help") || strings.Contains(arg, "?") {
 		return true

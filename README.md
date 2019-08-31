@@ -21,6 +21,8 @@ smartlight consists of 3 binaries:
   * tray icon with menu to control smservice
   * set up as a startup application in your DE
 
+Note that **smtray** requires [libappindicator](https://launchpad.net/libappindicator)
+
 ## Building
 
 See buildscript `build.sh`.
@@ -59,6 +61,8 @@ Following libraries are used:
 * [gohook](https://github.com/robotn/gohook) - catching keyboard / mouse events
 * [systray](https://github.com/getlantern/systray) - tray icon (for smtray)
 * [beeep](https://github.com/gen2brain/beeep) - notifications (from smtray)
+
+* [libappindicator](https://launchpad.net/libappindicator) - needed for systray / smtray
 
 ## Disclamer
 

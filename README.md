@@ -44,7 +44,7 @@ or download binaries from the [releases](https://github.com/moson-mo/smartlight/
 ## Installation
 
 You can use the install script `install.sh` which copies the binaries to /usr/local/bin/.</br>
-Note that you need to build first (or download binries from release on github).
+Note that you need to build first (or download binaries from release on github).
 
 In order to run things on startup set up smservice (and smtray if you like) as startup application on your favorite desktop environment.
 

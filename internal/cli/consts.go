@@ -2,17 +2,16 @@ package cli
 
 const (
 	// info text which is printed when -h or equivalent parameters are used
-	infoTXT = `smartlight cli-client
+	infoTXT = `
+smartlight cli-client
 
 Usage:
 smcli [COMMAND]
 	
 Commands:
-start		starts the service
+enable		enables backlight switching
 
-stop		stops the backlight service 
-		(the service will still be running
-		to accept further commands)
+disable		disables backlight switching
 
 status		returns the current status
 

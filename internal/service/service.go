@@ -53,11 +53,13 @@ func new(c config) (*service, error) {
 
 // Start is starting the service which checks for keyboard / mouse events and sets the backlight accordingly.
 func (s *service) Start() {
+	s.mut.Lock()
 	if s.IsRunning {
 		helper.PrintErrorString("already running!")
 		return
 	}
 	s.IsRunning = true
+	s.mut.Unlock()
 	s.setBacklightValue(0) // dirty hack to fix problems with some models ?!
 	s.waitForEvents()
 }

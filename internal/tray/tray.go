@@ -60,7 +60,7 @@ func buildMenu() {
 	go func() {
 		for {
 			<-mid.ClickedCh
-			msg, err := callRPCFunc("stop")
+			msg, err := callRPCFunc("disable")
 			if err != nil {
 				notifyError(err.Error())
 				continue
@@ -76,7 +76,7 @@ func buildMenu() {
 	go func() {
 		for {
 			<-mie.ClickedCh
-			msg, err := callRPCFunc("start")
+			msg, err := callRPCFunc("enable")
 			if err != nil {
 				notifyError(err.Error())
 				continue
@@ -126,7 +126,7 @@ func setItemStatus(mie, mid, mir *systray.MenuItem) {
 		}
 		systray.Quit()
 	}
-	if status == "started" {
+	if status == "enabled" {
 		mie.Disable()
 		mid.Enable()
 		mir.Hide()

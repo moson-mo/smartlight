@@ -20,30 +20,30 @@ type Server struct {
 
 // Execute is the method that can be called from the rpc clients
 func (s *Server) Execute(req string, res *Response) error {
-	if req == "stop" {
+	if req == "disable" {
 		if *s.IsRunning {
 			s.Stop()
-			res.Message = "stopped"
+			res.Message = "disabled"
 			return nil
 		}
-		res.Message = "service is already stopped"
+		res.Message = "service is already disabled"
 		return nil
 	}
-	if req == "start" {
+	if req == "enable" {
 		if !*s.IsRunning {
 			go s.Start()
-			res.Message = "started"
+			res.Message = "enabled"
 			return nil
 		}
-		res.Message = "service already running"
+		res.Message = "service already enabled/running"
 		return nil
 	}
 	if req == "status" {
 		if *s.IsRunning {
-			res.Message = "started"
+			res.Message = "enabled"
 			return nil
 		}
-		res.Message = "stopped"
+		res.Message = "disabled"
 		return nil
 	}
 	if req == "quit" {

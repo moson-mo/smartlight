@@ -83,7 +83,7 @@ func Run() {
 
 // start the rpc server which is accessed by the tray and cli applications
 func startRPCServer(srv *rpc.Server) error {
-	sock, err := net.Listen("tcp", ":31987")
+	sock, err := net.Listen("tcp", "127.0.0.1:31987")
 	if err != nil {
 		return err
 	}
